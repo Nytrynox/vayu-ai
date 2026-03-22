@@ -1,147 +1,183 @@
 # VAYU AI
 
-## Abstract
-This repository serves as the core codebase for the **VAYU AI** system. It encompasses the source code, architectural configurations, and structural assets required for deployment, execution, and continued development.
+India's first AI-powered hyperlocal pollution death risk predictor. VAYU AI is a comprehensive 10-page Streamlit application that fetches real-time air quality data from multiple APIs, predicts AQI 72 hours ahead, calculates personalized health risks, tracks carbon footprints, and provides hospital preparedness alerts -- all with a premium dark/light theme interface.
 
-## System Architecture
+---
 
-### Project Specifications
-- **Technology Stack:** Python Environment / Data & Backend Systems
-- **Primary Language:** Python
-- **Execution Entrypoint:** Python module execution
+## Table of Contents
 
-### Architectural Paradigm
-The system is designed utilizing a modular architectural approach, effectively isolating application logic, integration interfaces, and support configurations. Transient build directories, dependency caches, and virtual environments are explicitly excluded from source control to maintain structural integrity and reproducibility.
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Technology Stack](#technology-stack)
+- [Project Structure](#project-structure)
+- [Pages and Features](#pages-and-features)
+- [Data Sources](#data-sources)
+- [Installation](#installation)
+- [Usage](#usage)
+- [License](#license)
 
-- **Application Layer:** Contains the core executables, command handlers, and user interface endpoints.
-- **Domain Layer:** Encapsulates the business logic, specialized feature modules, and data processing routines.
-- **Integration Layer:** Manages internal and external communications, including database persistent layers, API bindings, and file system operations.
-- **Support Infrastructure:** Houses configuration matrices, deployment scripts, technical documentation, and testing frameworks.
+---
 
-## Data and Execution Flow
-1. **Initialization:** The platform bootstraps via the designated subsystem entrypoint.
-2. **Subsystem Routing:** Incoming requests, system commands, or execution triggers are directed to the designated feature modules within the domain layer.
-3. **Information Processing:** Domain logic is applied, interfacing closely with the integration layer for data persistence or external data retrieval as necessitated by the operation.
-4. **Resolution:** Computed artifacts and operational outputs are returned to the invoking interface, successfully terminating the transaction lifecycle.
+## Overview
 
-## Repository Component Map
-The following outlines the primary structural components and module layout of the project architecture:
+VAYU AI was built for the **Hack For Green Bharat 2026** hackathon. The platform addresses the crisis of 16 lakh annual pollution deaths in India by providing:
 
-```text
-.DS_Store
-.git
-.gitignore
-.streamlit
-.streamlit/config.toml
-.streamlit/secrets.toml
-LICENSE
-README.md
-__pycache__
-app.py
-carbon_calculator.py
-chatbot.py
-config.py
-data_fetcher.py
-gemini_explainer.py
-generate_pdf.py
-health_calculator.py
-hospital_predictor.py
-predictor.py
-requirements.txt
-utils.py
+- Real-time AQI monitoring with live API data (OpenAQ, WAQI)
+- 72-hour AQI prediction using weather-correlated models
+- Personalized health risk scoring based on age, conditions, and exposure
+- NASA FIRMS fire detection with distance-based AQI impact estimation
+- Hospital preparedness dashboard projecting patient loads
+- Carbon footprint calculator calibrated for Indian emission factors
+- AI-powered chatbot (NVIDIA Kimi K2) for pollution guidance
+
+---
+
+## Architecture
+
+```
++-------------------------------------------+
+|           Streamlit Dashboard             |
+|  10 Pages | Dark/Light Theme | Sidebar    |
++-------------------------------------------+
+         |              |            |
+         v              v            v
++----------------+ +----------+ +------------------+
+| data_fetcher   | | predictor| | health_calculator|
+| - OpenAQ API   | | - 72h    | | - Risk scoring   |
+| - WAQI API     | |   AQI    | | - Age/condition  |
+| - Open-Meteo   | |   model  | |   multipliers    |
+| - NASA FIRMS   | +----------+ +------------------+
+| - Geocoding    |
++----------------+      |             |
+         |              v             v
+         |      +------------+ +------------------+
+         |      | hospital   | | carbon_calculator|
+         |      | _predictor | | - Transport      |
+         |      | - Patient  | | - Energy         |
+         |      |   load     | | - Diet factors   |
+         |      +------------+ +------------------+
+         v
++-------------------------------------------+
+|              chatbot                      |
+|  NVIDIA Kimi K2 AI responses             |
+|  Context-aware pollution guidance         |
++-------------------------------------------+
 ```
 
-## Administrative Information
-- **Maintainer:** karthik-idikuda
-- **Documentation Build Date:** 2026-03-22
-- **Visibility:** Public Repository
+### Data Flow
 
-## Architecture Overview
+1. **Auto-location** -- User's city is detected via IP geolocation.
+2. **Data Fetch** -- AQI, weather, and fire data are fetched from live APIs.
+3. **Prediction** -- 72-hour AQI forecast is generated from current PM2.5 and weather data.
+4. **Visualization** -- Interactive Plotly charts, Folium maps, and metric cards render results.
+5. **Action** -- Health risk scores, safe windows, and hospital alerts are computed.
 
-### Project Type
-- **Primary stack:** Python application
-- **Primary language:** Python
-- **Primary entrypoint/build root:** main module or app script
+---
 
-### High-Level Architecture
-- This repository is organized in modular directories grouped by concern (application code, configuration, scripts, documentation, and assets).
-- Runtime/build artifacts such as virtual environments, node modules, and compiled outputs are intentionally excluded from architecture mapping.
-- The project follows a layered flow: entry point -> domain/application modules -> integrations/data/config.
+## Technology Stack
 
-### Component Breakdown
-- **Application layer:** Core executables, services, UI, or command handlers.
-- **Domain/business layer:** Feature logic and processing modules.
-- **Integration layer:** External APIs, databases, files, or platform-specific connectors.
-- **Support layer:** Config, scripts, docs, tests, and static assets.
+| Component          | Technology                            |
+|--------------------|---------------------------------------|
+| Framework          | Streamlit                             |
+| Charting           | Plotly (Graph Objects + Express)       |
+| Mapping            | Folium + streamlit-folium             |
+| Data Processing    | pandas, NumPy                         |
+| APIs               | OpenAQ, WAQI, Open-Meteo, NASA FIRMS  |
+| AI Chatbot         | NVIDIA Kimi K2                        |
+| Theming            | Custom CSS injection (Dark/Light)     |
 
-### Data/Execution Flow
-1. Start from the configured entrypoint or package scripts.
-2. Route execution into feature-specific modules.
-3. Process domain logic and interact with integrations/storage.
-4. Return results to UI/API/CLI outputs.
+---
 
-### Directory Map (Top-Level + Key Subfolders)
+## Project Structure
+
 ```
-predictor.py
-hospital_predictor.py
-health_calculator.py
-.DS_Store
-config.py
-gemini_explainer.py
-LICENSE
-requirements.txt
-.streamlit
-.streamlit/config.toml
-.streamlit/secrets.toml
-__pycache__
-README.md
-.gitignore
-utils.py
-app.py
-chatbot.py
-carbon_calculator.py
-generate_pdf.py
-.git
-data_fetcher.py
+VAYU-AI/
+|
+|-- app.py                    # Main Streamlit application (760 lines, 10 pages)
+|-- config.py                 # API keys and configuration
+|-- requirements.txt          # Python dependencies
+|
+|-- data_fetcher.py           # Multi-API data acquisition module
+|   |                         #   - get_best_aqi_data()
+|   |                         #   - get_weather_forecast()
+|   |                         #   - get_nasa_fires()
+|   |                         #   - get_historical_weather()
+|   |                         #   - search_locations()
+|   +                         #   - get_multi_city_data()
+|
+|-- predictor.py              # 72-hour AQI prediction engine
+|-- health_calculator.py      # Personal health risk scoring
+|-- hospital_predictor.py     # Hospital patient load projection
+|-- carbon_calculator.py      # Carbon footprint computation
+|-- chatbot.py                # NVIDIA Kimi K2 integration
+|-- gemini_explainer.py       # Gemini-based AQI explanations
+|-- generate_pdf.py           # PDF report generation
++-- utils.py                  # Shared utility functions
 ```
 
-### Notes
-- Architecture section auto-generated on 2026-03-22 and can be refined further with exact runtime/deployment details.
+---
 
-## Technical Stack
+## Pages and Features
 
-- Core language: Python
-- Primary stack: Python application
+| Page                | Description                                                   |
+|---------------------|---------------------------------------------------------------|
+| Home Dashboard      | Live AQI display, pollutant breakdown vs WHO limits, 72h snapshot |
+| 72H Prediction      | Hourly AQI forecast chart with safe/danger windows            |
+| Pollution Heatmap   | Folium map with AQI markers and NASA fire overlays            |
+| Health Risk         | Age/condition-adjusted personal risk calculator               |
+| City Comparison     | Multi-city AQI bar chart comparison (up to 5 cities)          |
+| Hospital Alert      | Projected respiratory patient loads and medicine stocking     |
+| Historical Trends   | 30-day estimated AQI from weather data, day/hour analysis     |
+| Green Tracker       | Gamified eco-action logging with points and CO2 savings       |
+| Carbon Calculator   | Transport, energy, and diet carbon footprint estimator        |
+| AI Chatbot          | Context-aware pollution Q&A powered by NVIDIA Kimi K2        |
 
-## Setup
+---
 
-Typical local setup for Python applications:
+## Data Sources
 
-1. Ensure Python 3.x is installed.
-2. (Recommended) Create and activate a virtual environment.
-3. Install dependencies if a requirements file is present.
+| Source           | Data Provided                     | Access Method    |
+|------------------|-----------------------------------|------------------|
+| OpenAQ           | Real-time PM2.5, PM10, NO2, CO    | REST API         |
+| WAQI             | Air Quality Index                 | REST API (token) |
+| Open-Meteo       | Weather forecast and historical   | REST API (free)  |
+| NASA FIRMS       | Active fire hotspots              | REST API (key)   |
+| Nominatim/OSM    | Location geocoding                | REST API (free)  |
+
+---
+
+## Installation
 
 ```bash
+git clone https://github.com/karthik-idikuda/VAYU-AI.git
+cd VAYU-AI
+
 python -m venv .venv
-source .venv/bin/activate   # on Windows use: .venv\Scripts\activate
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Running Locally
+### API Keys (optional)
 
-Start the main application module:
+Create `.streamlit/secrets.toml`:
 
-```bash
-python app.py
-
+```toml
+NASA_FIRMS_KEY = "your_key"
+WAQI_TOKEN = "your_token"
 ```
 
-## Testing
+---
 
-If tests are present, they can typically be executed with pytest:
+## Usage
 
 ```bash
-pytest
-
+streamlit run app.py
 ```
 
+The application opens at `http://localhost:8501`. Use the sidebar to navigate between pages and search for locations.
+
+---
+
+## License
+
+This project was built for the Hack For Green Bharat 2026 hackathon.
