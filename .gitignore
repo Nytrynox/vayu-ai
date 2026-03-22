@@ -42,3 +42,10 @@ env/
 VAYU_AI_Presentation.pdf
 generate_pdf.py
 vayu_ai_final.zip
+*.pyc
+venv2/
+node_modules/
+target/
+.next/
+.gradle/
+.env.local

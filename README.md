@@ -97,4 +97,55 @@ This software is the **exclusive property of Karthik Idikuda**.
   <img src="https://readme-typing-svg.herokuapp.com?font=Orbitron&weight=600&size=18&pause=1000&color=FF6E96&center=true&vCenter=true&width=535&lines=Engineered+by+Karthik+Idikuda;Strictly+Proprietary+Technology;Unauthorized+Use+Prohibited" alt="Typing SVG" />
 </div>
 
+## Architecture Overview
+
+### Project Type
+- **Primary stack:** Python application
+- **Primary language:** Python
+- **Primary entrypoint/build root:** main module or app script
+
+### High-Level Architecture
+- This repository is organized in modular directories grouped by concern (application code, configuration, scripts, documentation, and assets).
+- Runtime/build artifacts such as virtual environments, node modules, and compiled outputs are intentionally excluded from architecture mapping.
+- The project follows a layered flow: entry point -> domain/application modules -> integrations/data/config.
+
+### Component Breakdown
+- **Application layer:** Core executables, services, UI, or command handlers.
+- **Domain/business layer:** Feature logic and processing modules.
+- **Integration layer:** External APIs, databases, files, or platform-specific connectors.
+- **Support layer:** Config, scripts, docs, tests, and static assets.
+
+### Data/Execution Flow
+1. Start from the configured entrypoint or package scripts.
+2. Route execution into feature-specific modules.
+3. Process domain logic and interact with integrations/storage.
+4. Return results to UI/API/CLI outputs.
+
+### Directory Map (Top-Level + Key Subfolders)
+```
+predictor.py
+hospital_predictor.py
+health_calculator.py
+.DS_Store
+config.py
+gemini_explainer.py
+requirements.txt
+.streamlit
+.streamlit/config.toml
+.streamlit/secrets.toml
+__pycache__
+README.md
+.gitignore
+utils.py
+app.py
+chatbot.py
+carbon_calculator.py
+generate_pdf.py
+.git
+data_fetcher.py
+```
+
+### Notes
+- Architecture section auto-generated on 2026-03-22 and can be refined further with exact runtime/deployment details.
+
 <!-- WATERMARK: S0ktUFJPUFJJRVRBUlktdmF5dS1haS0yMDI2 -->
